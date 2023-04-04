@@ -1,6 +1,11 @@
 import _ from 'lodash';
 window._ = _;
 
+import '../sass/app.scss'
+
+// Import all of Bootstrap's JS
+import * as bootstrap from 'bootstrap';
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -11,6 +16,12 @@ import axios from 'axios';
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+import $ from 'jquery';
+window.$ = $;
+
+import DataTable from 'datatables.net-dt';
+window.DataTable = DataTable;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

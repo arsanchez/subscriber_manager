@@ -17,6 +17,7 @@ use App\Http\Controllers\SubscriberController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::post('/save', [HomeController::class, 'saveKey']);
 
  
-Route::resource('subcribers', SubscriberController::class);
+Route::resource('subscribers', SubscriberController::class);

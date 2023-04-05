@@ -22,6 +22,17 @@ window.$ = $;
 
 import DataTable from 'datatables.net-dt';
 window.DataTable = DataTable;
+import 'datatables.net-responsive-dt';
+
+// Setting up CSRF for AJAX calls 
+$.ajaxSetup({
+    headers: {
+       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+ });
+
+import Swal from 'sweetalert2';
+window.Swal = Swal;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

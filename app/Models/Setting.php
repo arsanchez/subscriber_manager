@@ -9,7 +9,13 @@ class Setting extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     public $casts = [
         'key' => 'encrypted',
+    ];
+
+    public $fillable = [
+        'key'
     ];
 }

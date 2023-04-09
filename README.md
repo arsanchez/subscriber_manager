@@ -10,7 +10,7 @@
 
 - Install JS dependencies by running  `npm install`
 
-- Import the db script in the *subscribers.sql* file located in the *db* folder using phpMyAdmin or any other Mysql client
+- Import the db script in the ***subscribers.sql*** file located in the ***db*** folder using phpMyAdmin or any other Mysql client
 
 - Rename the .env.example file to .env by running `mv .env.example .env`
 

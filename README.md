@@ -10,6 +10,8 @@
 
 - Install JS dependencies by running  `npm install`
 
+- Import the db script in the *subscribers.sql* file located in the *db* folder using phpMyAdmin or any other Mysql client
+
 - Rename the .env.example file to .env by running `mv .env.example .env`
 
 - Set up your db connection details, the db name is  subscribers
@@ -34,3 +36,5 @@
 
 ## Running the test 
 
+- Open a terminal window on the root folder of the repo 
+- Run the following command `php artisan test`

@@ -1,5 +1,5 @@
 <x-layout>
-@if ($errors->any())
+@if (isset($errors) && $errors->any())
 <h4 class="text-danger">Error {{$errors->first()}}</h4>
 @endif
 <div class="row">

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Middleware\ValidateApiKey;
 
 
 /*
@@ -20,4 +21,4 @@ Route::get('/', [HomeController::class, 'index']);
 Route::post('/save', [HomeController::class, 'saveKey']);
 
  
-Route::resource('subscribers', SubscriberController::class);
+Route::middleware([ValidateApiKey::class])->resource('subscribers', SubscriberController::class);

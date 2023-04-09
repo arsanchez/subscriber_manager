@@ -16,12 +16,14 @@ class SubscriberController extends Controller
 
     public function __construct() {
         $settings = Setting::first();
-        $this->apiKey = $settings->key;
-        $this->defultHeaders = [
-            'Authorization' => 'Bearer '.$this->apiKey,
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
+        if ($settings) {
+            $this->apiKey = $settings->key;
+            $this->defultHeaders = [
+                'Authorization' => 'Bearer '.$this->apiKey,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ];
+        }
     }
 
     /**

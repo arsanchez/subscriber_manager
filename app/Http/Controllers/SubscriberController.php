@@ -37,42 +37,70 @@ class SubscriberController extends Controller
         $start = $request->input('start', 0);
         $draw = $request->input('draw', 0);
 
-        // Getting the next API cursor
-        $url = 'https://connect.mailerlite.com/api/subscribers';
-        $next = $request->session()->get('next_url', false);
-        $prev = $request->session()->get('prev_url', false);
-        $current_page = $request->session()->get('current_page', 1);
+        // Cheking if the email filter is valid 
+        $email = $request->input('email_search', 0);
+        $emailValidator = Validator::make(['email' => $email],[
+            'email' => 'required|email'
+        ]);
+          
+        if($emailValidator->passes()){
+            $url = 'https://connect.mailerlite.com/api/subscribers/' . $email;
 
-        $params = ['limit' => $length];
-        if ( ($start > $current_page) && $next != false) {
-            $params['cursor'] = $next;
-        } else if ($start < $current_page && $prev != false) {
-            $params['cursor'] = $prev;
-        }
+            $response = Http::withHeaders( $this->defultHeaders )
+            ->get($url)
+            ->getBody()->getContents();
 
+            $subscriber = json_decode($response);
 
-        // Getting the subscribers from the mailer lite API
-        $response = Http::withHeaders( $this->defultHeaders )
-                    ->get($url, $params)
-                    ->getBody()->getContents();
+            // Cheking for results 
+            if (isset($subscriber->message)) {
+                $data = [];
+                $count = 0;
+            } else {
+                $data = [$subscriber->data];
+                $count = 1;
+            }
 
-        $subscribers = json_decode($response);
-        
-        $request->session()->put('current_page', $start);
+            return Response::json($this->parseDatatablesResponse($data, $count, $draw), 201);
+        } else {
+            // Getting the next API cursor
+            $url = 'https://connect.mailerlite.com/api/subscribers';
+            $next = $request->session()->get('next_url', false);
+            $prev = $request->session()->get('prev_url', false);
+            $current_page = $request->session()->get('current_page', 1);
 
-        // Getting the total count 
-        $response = Http::withHeaders( $this->defultHeaders )
+            $params = ['limit' => $length];
+            if ( ($start > $current_page) && $next != false) {
+                $params['cursor'] = $next;
+            } else if ($start < $current_page && $prev != false) {
+                $params['cursor'] = $prev;
+            }
+
+            // Getting the subscribers from the mailer lite API
+            $response = Http::withHeaders( $this->defultHeaders )
+            ->get($url, $params)
+            ->getBody()->getContents();
+
+            $subscribers = json_decode($response);
+
+            $request->session()->put('current_page', $start);
+
+            // Getting the total count 
+            $response = Http::withHeaders( $this->defultHeaders )
                     ->get($url.'?limit=0')
                     ->getBody()->getContents();
-        $subscribersTotal = json_decode($response);
-        return Response::json($this->parseDatatablesResponse($subscribers, $subscribersTotal->total, $draw, $request), 201);
+            $subscribersTotal = json_decode($response);
+
+            // Setting the cursors
+            $request->session()->put('next_url', $subscribers->meta->next_cursor);
+            $request->session()->put('prev_url', $subscribers->meta->prev_cursor);
+
+            return Response::json($this->parseDatatablesResponse($subscribers->data, $subscribersTotal->total, $draw), 201);
+        }
+
     }
 
-    private function parseDatatablesResponse($response, $count, $draw, $request) {
-        // Setting the lings
-        $request->session()->put('next_url', $response->meta->next_cursor);
-        $request->session()->put('prev_url', $response->meta->prev_cursor);
-
+    private function parseDatatablesResponse($data, $count, $draw) {
         $parsedResponse  = new \stdClass();
         $parsedResponse->draw = $draw;
         $parsedResponse->recordsTotal = $count;
@@ -80,7 +108,7 @@ class SubscriberController extends Controller
         $parsedResponse->data = [];
 
         // Parsing the resposne data 
-        foreach ($response->data as $row) {
+        foreach ($data as $row) {
             // Parsing the date 
             $d = strtotime($row->subscribed_at);
             $subscribed_at_date = date("d/m/Y", $d);

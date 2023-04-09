@@ -6,7 +6,6 @@ var table = {
     init: function( selector ) {
         table.tableRef = $(selector).DataTable({
             "columnDefs": [
-                { "targets": [1,2,3,4,5], "searchable": false },
                 { targets: -1, data: null, defaultContent: '<a class ="delete-btn btn btn-danger">Delete</button>'},
                 {
                     targets:0,
@@ -20,7 +19,13 @@ var table = {
             ],
             processing: true,
             serverSide: true,
-            ajax: '/subscribers',
+            searching: false,
+            ajax: {
+                "url": '/subscribers',
+                data: function (d) {
+                    d.email_search = $("#subscriber-email").val();
+                }
+              },
         });
 
         table.addListeners(selector);
@@ -40,10 +45,17 @@ var table = {
                 }
             });
         });
+
+        $('#subscriber-email').on("input", function() {
+            let email = $(this).val();
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || email == '' ) {
+                table.tableRef.ajax.reload();
+            }
+        });
     }
  
 };
  
 $.when( $.ready ).then(function() {
-    table.init('#subscriber_table')
+    table.init('#subscriber_table');
 });

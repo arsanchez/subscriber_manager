@@ -1,4 +1,4 @@
-<div>
+<div class="col">   
     <table id="subscriber_table" class="display" style="width:100%">
         <thead>
             <tr>

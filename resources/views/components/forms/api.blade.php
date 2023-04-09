@@ -1,4 +1,4 @@
-<div>
+<div class="col">
     <h2>Looks like you're missing your api key</h2>
     <div class="form-group" id="api_form">
         <label for="exampleapikeyInputEmail1">Please enter your key</label>

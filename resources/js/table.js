@@ -7,7 +7,16 @@ var table = {
         table.tableRef = $(selector).DataTable({
             "columnDefs": [
                 { "targets": [1,2,3,4,5], "searchable": false },
-                { targets: -1, data: null, defaultContent: '<a class ="edit-btn btn btn-success">Edit</button><a class ="delete-btn btn btn-danger">Delete</button>'},
+                { targets: -1, data: null, defaultContent: '<a class ="delete-btn btn btn-danger">Delete</button>'},
+                {
+                    targets:0,
+                    render: function ( data, type, row, meta ) {
+                        if(type === 'display') {
+                            data = '<a href="/subscribers/' + row[5] +'/edit">' +  data + '</a>';
+                        }
+                        return data;
+                    }
+                }
             ],
             processing: true,
             serverSide: true,
@@ -18,16 +27,18 @@ var table = {
     },
 
     addListeners: function(selector) {
-        // Editing a record
-        $(selector + ' tbody').on('click', '.edit-btn', function () {
-            var data = table.tableRef.row($(this).parents('tr')).data();
-            console.log(data);
-        });
-
         // Deleting a record
         $(selector + ' tbody').on('click', '.delete-btn', function () {
             var data = table.tableRef.row($(this).parents('tr')).data();
-            console.log(data);
+            let id = data[5];
+            
+            $.ajax({
+                url: "/subscribers/" + id ,
+                type: 'DELETE',
+                success: function() {
+                    table.tableRef.ajax.reload();
+                }
+            });
         });
     }
  

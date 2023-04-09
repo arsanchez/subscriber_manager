@@ -17,12 +17,17 @@ window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-import $ from 'jquery';
-window.$ = $;
 
-import DataTable from 'datatables.net-dt';
-window.DataTable = DataTable;
-import 'datatables.net-responsive-dt';
+// Having issues with Vite, using the CDNs
+// import jQuery from "jquery";
+// window.$ = jQuery;
+// import validate from 'jquery-validation'
+
+
+// import DataTable from 'datatables.net';
+// window.DataTable = DataTable;
+// import 'datatables.net-buttons-dt';
+// import 'datatables.net-responsive-dt';
 
 // Setting up CSRF for AJAX calls 
 $.ajaxSetup({

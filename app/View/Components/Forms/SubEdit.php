@@ -1,20 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Forms;
 
 use Illuminate\View\Component;
 
-class forms.subscriber extends Component
+class SubEdit extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(
+        public $subscriber
+    ) {}
 
     /**
      * Get the view / contents that represent the component.
@@ -23,6 +22,6 @@ class forms.subscriber extends Component
      */
     public function render()
     {
-        return view('components.forms.subscriber');
+        return view('components.forms.sub-edit');
     }
 }

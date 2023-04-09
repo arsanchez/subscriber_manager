@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Response;
 
 class HomeController extends Controller
 {
@@ -50,11 +50,4 @@ class HomeController extends Controller
             'success' => true
         ], 201);
     }   
-
-    private function errorResponse($message = 'there was an unexpected error') {
-        return Response::json(array(
-            'success' => false,
-            'errors' => $message
-        ), 400);
-    }
 }
